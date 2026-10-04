@@ -24,6 +24,9 @@ function extractPartialStreams(input: Uint8Array): Uint8Array[] {
   while (offset < input.length) {
     const jxlpBox = findBox(input, 'jxlp', offset)
     if (!jxlpBox) break
+    if (jxlpBox.size < 12) {
+      throw new TypeError('Invalid JXL')
+    }
     partialStreams.push(
       input.slice(jxlpBox.offset + 12, jxlpBox.offset + jxlpBox.size),
     )
@@ -62,6 +65,6 @@ export const JXL: IImage = {
   calculate(input: Uint8Array): ISize {
     const codestream = extractCodestream(input)
     if (codestream) return JXLStream.calculate(codestream)
-    throw new Error('No codestream found in JXL container')
+    throw new TypeError('Invalid JXL')
   },
 }

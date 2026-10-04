@@ -70,6 +70,9 @@ function readImageHeader(
   imageOffset: number,
 ): [string, number] {
   const imageLengthOffset = imageOffset + ENTRY_LENGTH_OFFSET
+  if (imageLengthOffset + 4 > input.length) {
+    throw new TypeError('Invalid ICNS')
+  }
   return [
     toUTF8String(input, imageOffset, imageLengthOffset),
     readUInt32BE(input, imageLengthOffset),
@@ -90,6 +93,11 @@ export const ICNS: IImage = {
     let imageOffset = SIZE_HEADER
 
     let imageHeader = readImageHeader(input, imageOffset)
+    // an entry is at least its own 8 byte header; anything smaller would
+    // keep the offset from advancing
+    if (imageHeader[1] < SIZE_HEADER) {
+      throw new TypeError('Invalid ICNS')
+    }
     let imageSize = getImageSize(imageHeader[0])
     imageOffset += imageHeader[1]
 
@@ -103,6 +111,9 @@ export const ICNS: IImage = {
 
     while (imageOffset < fileLength && imageOffset < inputLength) {
       imageHeader = readImageHeader(input, imageOffset)
+      if (imageHeader[1] < SIZE_HEADER) {
+        throw new TypeError('Invalid ICNS')
+      }
       imageSize = getImageSize(imageHeader[0])
       imageOffset += imageHeader[1]
       result.images.push(imageSize)

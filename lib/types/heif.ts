@@ -30,6 +30,9 @@ export const HEIF: IImage = {
     const ipcoBox = iprpBox && findBox(input, 'ipco', iprpBox.offset + 8)
     const ispeBox = ipcoBox && findBox(input, 'ispe', ipcoBox.offset + 8)
     if (ispeBox) {
+      if (ispeBox.size < 20) {
+        throw new TypeError('Invalid HEIF')
+      }
       return {
         height: readUInt32BE(input, ispeBox.offset + 16),
         width: readUInt32BE(input, ispeBox.offset + 12),
