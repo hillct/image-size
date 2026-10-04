@@ -19,7 +19,7 @@ advisories only on 2.x (2.0.3, 2.0.4); the `v1.x` branch (1.2.1) has no fix.
 | Tests | 3 upstream malformed samples added to `specs/images/invalid/` (the existing invalid spec checks every file there for `TypeError /^Invalid \w+$/`) |
 | Results | Stock: ICNS sample hangs, JXL throws a plain `Error`, HEIF returns a bogus size. Fork: all three throw the expected `TypeError`. 101 existing specs pass on stock and fork; 107 with the new samples. |
 | `dist/` | Built with `tsc` and **committed** (upstream builds on publish; a submodule has no build step). Rebuild after any `lib/` change. |
-| `package.json` | devDependencies removed so a workspace install stays lean. To run the specs: `npm i --no-save --ignore-scripts mocha@11 ts-node chai@4 glob@10 sinon@17 typescript@5.4 @types/{node,mocha,chai,sinon,glob} queue` then `npx mocha` (mocha 10.2 does not run on Node 26). |
+| `package.json` | devDependencies removed so a workspace install stays lean. `npm test` runs `test-vendored/` (plain node:test against `dist/`, no dev deps). To run the full upstream specs: `npm i --no-save --ignore-scripts mocha@11 ts-node chai@4 glob@10 sinon@17 typescript@5.4 @types/{node,mocha,chai,sinon,glob} queue` then `npx mocha` (mocha 10.2 does not run on Node 26). |
 
 ## Retire this fork when
 the consumer moves to Metro >= 0.87 (it dropped `image-size` for its own `lib/imageSize`; current `react-native`

@@ -14,7 +14,7 @@
   "bin": "bin/image-size.js",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"see VENDORED.md: tests run with mocha/ts-node installed ad hoc\" && exit 1"
+    "test": "node --test test-vendored/"
   },
   "keywords": [
     "image",
